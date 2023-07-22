@@ -1,23 +1,29 @@
+const { USER_COLLECTION, SALT_ROUNDS } = require('../constants');
 const database = require('../database/index');
+const bcrypt = require('bcrypt')
 
 
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        // Add the user document to the "users" collection in Firestore
-        const user = database.collection('users').doc();
-        const findUser = await database.collection('users').where('email', '==', email).get()
+        const user = database.collection(USER_COLLECTION).doc(); // Note: Add the user document to the "users" collection in Firestore
+        const findUser = await database.collection(USER_COLLECTION).where('email', '==', email).get() //  Note : Find the email if exist
 
         if (!findUser.empty) {
             return res.status(400).json({ message: "Email is already exist" })
         }
 
-        await user.set({ name, email, password });
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+        await user.set({
+            name: name,
+            email: email,
+            password: hashedPassword
+        });
 
         res.json({ message: 'User added successfully!' });
     } catch (error) {
-        console.error('Error adding user:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
