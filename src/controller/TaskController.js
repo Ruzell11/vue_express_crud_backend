@@ -3,6 +3,7 @@ import Validator from "validatorjs";
 import generalHelper from '../helpers/generalHelper';
 import database from "../database";
 
+
 const getTaskListByUser = async (req, res) => {
     try {
         const validation = new Validator(req.query, {
@@ -18,7 +19,7 @@ const getTaskListByUser = async (req, res) => {
         const findTask = await database.collection(TASK_COLLECTION).where('user_id', "==", user_id).get()
 
         if (findTask.empty) {
-            return res.status(HTTP_STATUS_CODE_NOT_FOUND).json({ message: "No task available for this user" })
+            return res.status(HTTP_STATUS_CODE_OK).json({ message: "No task available for this user", count: 0 })
         }
 
         const userTaskArray = []

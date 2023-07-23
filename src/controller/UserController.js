@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import database from '../database/index';
 import bcrypt from 'bcrypt';
 import generalHelper from '../helpers/generalHelper'
-
+require('dotenv').config();
 const registerUser = async (req, res) => {
     try {
         const validation = new Validator(req.body, {
@@ -72,7 +72,7 @@ const loginUser = async (req, res) => {
             return res.status(HTTP_STATUS_CODE_BAD_REQUEST).json({ message: "Incorrect email or password" })
         }
 
-        const token = jwt.sign({ id: userDoc.id, name: userData.username }, JWT_SECRET_KEY);
+        const token = jwt.sign({ id: userDoc.id, name: userData.username }, process.env.JWT_SECRET_KEY);
 
         res.json({ id: userDoc.id, name: userData.name, email: userData.email, token: token })
 
@@ -88,7 +88,7 @@ const logout = (req, res) => {
         const token = req.headers.authorization.split(' ')[1];
 
         // Check if the token is valid and not expired
-        jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
             if (err) {
                 // Token verification failed
                 return res.status(401).json({ message: 'Invalid or expired token' });
