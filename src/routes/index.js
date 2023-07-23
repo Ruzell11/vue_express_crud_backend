@@ -1,5 +1,5 @@
 import express from "express"
-import { registerUser, loginUser } from '../controller/UserController'
+import { registerUser, loginUser, logout } from '../controller/UserController'
 
 import { getTaskListByUser, addTask, updateTask, deleteTask } from '../controller/TaskController'
 import authenticateToken from "../middleware"
@@ -10,9 +10,11 @@ router.post('/create-user', registerUser);
 router.post('/login-user', loginUser);
 
 //Note: protected routes
+router.delete('/logout', authenticateToken, logout)
 router.post('/add-task', authenticateToken, addTask);
 router.get('/tasks', authenticateToken, getTaskListByUser);
 router.patch('/update-task', authenticateToken, updateTask);
 router.delete('/delete-task', authenticateToken, deleteTask);
+
 
 module.exports = router
