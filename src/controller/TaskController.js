@@ -5,7 +5,7 @@ import database from "../database";
 
 const getTaskListByUser = async (req, res) => {
     try {
-        const validation = new Validator(req.body, {
+        const validation = new Validator(req.query, {
             user_id: "required|string"
         });
 
@@ -14,7 +14,7 @@ const getTaskListByUser = async (req, res) => {
                 .json(generalHelper.getValidationError(validation));
             return;
         }
-        const { user_id } = req.body
+        const { user_id } = req.query
         const findTask = await database.collection(TASK_COLLECTION).where('user_id', "==", user_id).get()
 
         if (findTask.empty) {
