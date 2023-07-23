@@ -81,4 +81,26 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = { registerUser, loginUser }
+const logout = (req, res) => {
+    try {
+        const validTokens = new Set();
+
+        const token = req.headers.authorization.split(' ')[1];
+
+        // Check if the token is valid and not expired
+        jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
+            if (err) {
+                // Token verification failed
+                return res.status(401).json({ message: 'Invalid or expired token' });
+            }
+
+            validTokens.delete(token)
+            res.json({ message: 'Logout successful' });
+        });
+    } catch (error) {
+        console.error('Error during logout:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+module.exports = { registerUser, loginUser, logout }
