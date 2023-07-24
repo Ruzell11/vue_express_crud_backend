@@ -71,7 +71,7 @@ const loginUser = async (req, res) => {
         if (!isMatch) {
             return res.status(HTTP_STATUS_CODE_BAD_REQUEST).json({ message: "Incorrect email or password" })
         }
-
+        console.log(process.env.JWT_SECRET_KEY)
         const token = jwt.sign({ id: userDoc.id, name: userData.username }, process.env.JWT_SECRET_KEY);
 
         res.json({ id: userDoc.id, name: userData.name, email: userData.email, token: token })
