@@ -25,8 +25,8 @@ The Todo App Backend provides the backend functionality for a simple Todo applic
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/todo-app-backend.git
-cd todo-app-backend
+git clone https://github.com/Ruzell11/vue_express_crud_backend.git
+cd vue_express_crud_backend
 ```
 
 1. Install the dependencies:
